@@ -92,7 +92,7 @@ rsvpForm.addEventListener('submit', async event => {
       name: rsvpForm.elements.name.value.trim(),
       confirmation: rsvpForm.elements.confirmation.value.trim()
     });
-    rsvpFeedback.textContent = 'Your confirmation was sent for processing. Google does not return a delivery receipt to this page, so please contact Merian if you need confirmation.';
+    rsvpFeedback.textContent = 'Your confirmation was sent, SEE YOU!!!';
     showToast('Your attendance confirmation was sent ♡');
     rsvpForm.reset();
   } catch (error) {
@@ -115,7 +115,6 @@ document.querySelectorAll('dialog').forEach(dialog => {
 const photoFiles = document.querySelector('#photo-files');
 const cameraFile = document.querySelector('#camera-file');
 const photoFeedback = document.querySelector('#photo-feedback');
-const memoryGrid = document.querySelector('#memory-grid');
 const maxPhotoBytes = 8 * 1024 * 1024;
 const maxPhotosPerBatch = 5;
 
@@ -159,20 +158,10 @@ async function uploadPhotos(fileList, input) {
         mimeType: file.type,
         data: dataUrl.split(',')[1]
       });
-      const image = document.createElement('img');
-      image.src = dataUrl;
-      image.alt = file.name;
-      image.loading = 'lazy';
-      const card = document.createElement('figure');
-      card.className = 'memory-photo';
-      card.append(image);
-      const caption = document.createElement('figcaption');
-      caption.textContent = file.name;
-      card.append(caption);
-      memoryGrid.prepend(card);
     }
-    photoFeedback.textContent = 'Photo upload requests were sent for processing. Google Drive does not return a receipt to this page, so please contact Merian if you need confirmation.';
-    showToast('Your photos were sent to the event Drive ♡');
+    const successMessage = files.length === 1 ? 'Photo uploaded successfully!' : 'Photos uploaded successfully!';
+    photoFeedback.textContent = successMessage;
+    showToast(successMessage);
   } catch (error) {
     photoFeedback.textContent = error.message;
   } finally {
@@ -217,21 +206,71 @@ const audioCaption = document.querySelector('#audio-caption');
 let audioContext;
 let birthdayTune;
 let tuneStarting = false;
-const melody = [523.25, 659.25, 783.99, 659.25, 587.33, 698.46, 880, 698.46];
+const melody = [67, null, 72, 74, 76, null, 74, 72, 69, null, 72, 74, 76, 79, 76, null, 72, null, 76, 79, 81, null, 79, 76, 74, null, 72, 74, 72, 69, 67, null];
+function midiFrequency(note) {
+  return 440 * 2 ** ((note - 69) / 12);
+}
 function createBirthdayTune() {
   const sampleRate = audioContext.sampleRate;
-  const noteDuration = 0.43;
-  const noteLength = Math.floor(sampleRate * noteDuration);
+  const beatDuration = 60 / 118;
+  const stepDuration = beatDuration / 2;
+  const noteLength = Math.floor(sampleRate * stepDuration);
   const buffer = audioContext.createBuffer(1, noteLength * melody.length, sampleRate);
   const samples = buffer.getChannelData(0);
+  const bars = [
+    { bass: 36, chord: [60, 64, 67] },
+    { bass: 31, chord: [59, 62, 67] },
+    { bass: 33, chord: [57, 60, 64] },
+    { bass: 29, chord: [57, 60, 65] }
+  ];
 
-  melody.forEach((frequency, noteIndex) => {
-    const start = noteIndex * noteLength;
-    const playingLength = Math.floor(sampleRate * 0.38);
-    for (let i = 0; i < playingLength; i += 1) {
+  function addTone(start, duration, frequency, volume, harmonics = false) {
+    const firstSample = Math.floor(start * sampleRate);
+    const length = Math.floor(duration * sampleRate);
+    for (let i = 0; i < length && firstSample + i < samples.length; i += 1) {
       const time = i / sampleRate;
-      const envelope = Math.min(time / 0.025, 1) * Math.min((0.38 - time) / 0.02, 1);
-      samples[start + i] = Math.sin(2 * Math.PI * frequency * time) * Math.max(envelope, 0) * 0.045;
+      const envelope = Math.min(time / 0.008, 1) * Math.min((duration - time) / 0.035, 1);
+      const fundamental = Math.sin(2 * Math.PI * frequency * time);
+      const overtone = harmonics ? Math.sin(4 * Math.PI * frequency * time) * 0.25 : 0;
+      samples[firstSample + i] += (fundamental + overtone) * Math.max(envelope, 0) * volume;
+    }
+  }
+
+  melody.forEach((note, step) => {
+    const start = step * stepDuration;
+    const bar = bars[Math.floor(step / 8)];
+    const beat = step % 8;
+
+    if (note !== null) addTone(start, stepDuration * 0.82, midiFrequency(note), 0.075, true);
+    if (beat % 2 === 0) {
+      addTone(start, beatDuration * 0.88, midiFrequency(bar.bass), 0.12);
+      bar.chord.forEach(chordNote => addTone(start, beatDuration * 0.72, midiFrequency(chordNote + 12), 0.022));
+
+      const kickLength = Math.floor(sampleRate * 0.14);
+      const kickStart = Math.floor(start * sampleRate);
+      for (let i = 0; i < kickLength && kickStart + i < samples.length; i += 1) {
+        const time = i / sampleRate;
+        const envelope = Math.exp(-time * 24);
+        const frequency = 115 - 65 * (time / 0.14);
+        samples[kickStart + i] += Math.sin(2 * Math.PI * frequency * time) * envelope * 0.18;
+      }
+
+      if (beat === 2 || beat === 6) {
+        const clapLength = Math.floor(sampleRate * 0.12);
+        const clapStart = Math.floor(start * sampleRate);
+        for (let i = 0; i < clapLength && clapStart + i < samples.length; i += 1) {
+          const envelope = Math.exp(-(i / sampleRate) * 32);
+          const noise = Math.sin(i * 12.9898) * Math.sin(i * 78.233);
+          samples[clapStart + i] += noise * envelope * 0.055;
+        }
+      }
+    }
+
+    const hatStart = Math.floor(start * sampleRate);
+    const hatLength = Math.floor(sampleRate * 0.035);
+    for (let i = 0; i < hatLength && hatStart + i < samples.length; i += 1) {
+      const envelope = Math.exp(-(i / sampleRate) * 100);
+      samples[hatStart + i] += Math.sin((hatStart + i) * 17.31) * envelope * 0.018;
     }
   });
 
@@ -258,7 +297,7 @@ async function startBirthdayTune(showError = false) {
     playlistButton.setAttribute('aria-pressed', 'true');
     playlistButton.disabled = true;
     playlistLabel.textContent = 'Birthday tune is playing';
-    audioCaption.textContent = 'A soft, original melody is playing on repeat.';
+    audioCaption.textContent = 'A lively, original debut-party tune is playing on repeat.';
     document.removeEventListener('pointerdown', startTuneAfterInteraction);
     document.removeEventListener('keydown', startTuneAfterInteraction);
   } catch (error) {
@@ -283,7 +322,7 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && audioContext?.state === 'suspended') {
     audioContext.resume().then(() => {
       if (audioContext.state === 'running' && birthdayTune) {
-        audioCaption.textContent = 'A soft, original melody is playing on repeat.';
+        audioCaption.textContent = 'A lively, original debut-party tune is playing on repeat.';
       }
     }).catch(() => {
       audioCaption.textContent = 'Tap or press a key to resume the birthday tune.';
