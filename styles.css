@@ -31,6 +31,7 @@
 .tradition-roster li{min-width:0;padding:7px 9px;border-left:2px solid var(--rose);background:rgba(255,255,255,.7);color:#59474a;font-size:11px;overflow-wrap:anywhere}
 .tradition-roster>p{margin:10px 0 0!important;color:#8a6b70!important;font-family:var(--sans)!important;font-size:10px!important;line-height:1.5!important}
 .modal-close{z-index:1;display:grid;place-items:center;font-family:var(--sans);font-size:25px;line-height:1}
-.outfit-guide-image{width:100%;height:190px;margin:18px 0;overflow:hidden;border-radius:4px;background:#f8eeee}
-.outfit-guide-image img{display:block;width:100%;height:100%;object-fit:contain}
+.outfit-modal{width:min(680px,calc(100% - 32px))}
+.outfit-guide-image{width:100%;max-height:min(52vh,480px);margin:18px 0;overflow:hidden;border-radius:4px;background:#f8eeee}
+.outfit-guide-image img{display:block;width:100%;height:auto;max-height:min(52vh,480px);margin:auto;object-fit:contain}
 @media(max-width:480px){.tradition-roster ul{grid-template-columns:1fr}.rsvp-form .button{align-self:stretch;justify-content:center}}

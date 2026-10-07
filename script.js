@@ -215,47 +215,79 @@ const playlistButton = document.querySelector('#playlist-button');
 const playlistLabel = document.querySelector('#playlist-label');
 const audioCaption = document.querySelector('#audio-caption');
 let audioContext;
-let melodyTimer;
-let melodyStep = 0;
+let birthdayTune;
+let tuneStarting = false;
 const melody = [523.25, 659.25, 783.99, 659.25, 587.33, 698.46, 880, 698.46];
-function playNote(frequency) {
-  if (!audioContext) return;
-  const oscillator = audioContext.createOscillator();
-  const volume = audioContext.createGain();
-  oscillator.type = 'sine';
-  oscillator.frequency.value = frequency;
-  volume.gain.setValueAtTime(0.0001, audioContext.currentTime);
-  volume.gain.exponentialRampToValueAtTime(0.045, audioContext.currentTime + 0.025);
-  volume.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.36);
-  oscillator.connect(volume);
-  volume.connect(audioContext.destination);
-  oscillator.start();
-  oscillator.stop(audioContext.currentTime + 0.38);
+function createBirthdayTune() {
+  const sampleRate = audioContext.sampleRate;
+  const noteDuration = 0.43;
+  const noteLength = Math.floor(sampleRate * noteDuration);
+  const buffer = audioContext.createBuffer(1, noteLength * melody.length, sampleRate);
+  const samples = buffer.getChannelData(0);
+
+  melody.forEach((frequency, noteIndex) => {
+    const start = noteIndex * noteLength;
+    const playingLength = Math.floor(sampleRate * 0.38);
+    for (let i = 0; i < playingLength; i += 1) {
+      const time = i / sampleRate;
+      const envelope = Math.min(time / 0.025, 1) * Math.min((0.38 - time) / 0.02, 1);
+      samples[start + i] = Math.sin(2 * Math.PI * frequency * time) * Math.max(envelope, 0) * 0.045;
+    }
+  });
+
+  const source = audioContext.createBufferSource();
+  source.buffer = buffer;
+  source.loop = true;
+  source.connect(audioContext.destination);
+  return source;
 }
-playlistButton.addEventListener('click', async () => {
-  const isPlaying = playlistButton.getAttribute('aria-pressed') === 'true';
-  if (isPlaying) {
-    window.clearInterval(melodyTimer);
-    playlistButton.setAttribute('aria-pressed', 'false');
-    playlistLabel.textContent = 'Play a little birthday tune';
-    audioCaption.textContent = 'A tiny melody, made just for this page.';
-    return;
-  }
+async function startBirthdayTune(showError = false) {
+  if (tuneStarting || birthdayTune) return;
+  tuneStarting = true;
   try {
     const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
     if (!AudioContextConstructor) throw new Error('Audio is not supported here.');
     audioContext ||= new AudioContextConstructor();
     await audioContext.resume();
-    melodyStep = 0;
-    playNote(melody[melodyStep++]);
-    melodyTimer = window.setInterval(() => {
-      playNote(melody[melodyStep % melody.length]);
-      melodyStep += 1;
-    }, 430);
+    if (audioContext.state !== 'running') {
+      audioCaption.textContent = 'Tap or press a key to start the birthday tune. Browsers may block sound until you interact.';
+      return;
+    }
+    birthdayTune = createBirthdayTune();
+    birthdayTune.start();
     playlistButton.setAttribute('aria-pressed', 'true');
-    playlistLabel.textContent = 'Pause birthday tune';
-    audioCaption.textContent = 'A soft, original melody is playing.';
+    playlistButton.disabled = true;
+    playlistLabel.textContent = 'Birthday tune is playing';
+    audioCaption.textContent = 'A soft, original melody is playing on repeat.';
+    document.removeEventListener('pointerdown', startTuneAfterInteraction);
+    document.removeEventListener('keydown', startTuneAfterInteraction);
   } catch (error) {
-    showToast('Audio playback isn’t available in this browser.');
+    audioCaption.textContent = 'Tap or press a key to start the birthday tune.';
+    if (showError) showToast('Audio playback isn’t available yet. Try again after interacting with the page.');
+  } finally {
+    tuneStarting = false;
+  }
+}
+function startTuneAfterInteraction(event) {
+  if (event.target.closest?.('#playlist-button')) return;
+  startBirthdayTune();
+}
+document.addEventListener('pointerdown', startTuneAfterInteraction);
+document.addEventListener('keydown', startTuneAfterInteraction);
+playlistButton.addEventListener('click', () => {
+  if (!birthdayTune) {
+    startBirthdayTune(true);
   }
 });
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && audioContext?.state === 'suspended') {
+    audioContext.resume().then(() => {
+      if (audioContext.state === 'running' && birthdayTune) {
+        audioCaption.textContent = 'A soft, original melody is playing on repeat.';
+      }
+    }).catch(() => {
+      audioCaption.textContent = 'Tap or press a key to resume the birthday tune.';
+    });
+  }
+});
+startBirthdayTune();
