@@ -1,10 +1,10 @@
 const APPS_SCRIPT_ENDPOINT = '';
 
 const traditions = [
-  { name: '18 Candles', icon: '♧', meaning: 'Eighteen candles represent the light, love, and guidance Merian carries into this next chapter. Each candle is a wish from someone who holds her dear.' },
-  { name: '18 Shots', icon: '♢', meaning: 'A sparkling toast to eighteen years of laughter, friendship, and all the wonderful memories still to come. Raise a glass and celebrate together.' },
+  { name: '18 Candles', icon: '🕯', attendees: ['Sample guest 1', 'Sample guest 2', 'Sample guest 3'], meaning: 'Eighteen candles represent the light, love, and guidance Merian carries into this next chapter. Each candle is a wish from someone who holds her dear.' },
+  { name: '18 Shots', icon: '🥂', attendees: ['Sample guest 1', 'Sample guest 2', 'Sample guest 3'], meaning: 'A sparkling toast to eighteen years of laughter, friendship, and all the wonderful memories still to come. Raise a glass and celebrate together.' },
   { name: '18 Roses', icon: '❀', meaning: 'Eighteen roses are shared with the important people in Merian’s life—each one a little reminder of love, respect, and a special bond.' },
-  { name: '18 Treasures', icon: '♧', meaning: 'Eighteen thoughtful keepsakes represent the treasured lessons, dreams, and tokens of affection that Merian will carry with her.' },
+  { name: '18 Treasures', icon: '🎁', attendees: ['Sample guest 1', 'Sample guest 2', 'Sample guest 3'], meaning: 'Eighteen thoughtful keepsakes represent the treasured lessons, dreams, and tokens of affection that Merian will carry with her.' },
   { name: 'Message of Love', icon: '♡', meaning: 'A few heartfelt words can become a memory for a lifetime. Share a wish, a favorite story, or a little encouragement for the birthday girl.' }
 ];
 
@@ -31,6 +31,15 @@ traditions.forEach((item, index) => {
     document.querySelector('#tradition-number').textContent = String(index + 1).padStart(2, '0');
     document.querySelector('#tradition-title').textContent = item.name;
     document.querySelector('#tradition-description').textContent = item.meaning;
+    const roster = document.querySelector('#tradition-roster');
+    const attendeeList = document.querySelector('#tradition-attendees');
+    attendeeList.replaceChildren();
+    roster.hidden = !item.attendees;
+    (item.attendees || []).forEach(name => {
+      const attendee = document.createElement('li');
+      attendee.textContent = name;
+      attendeeList.append(attendee);
+    });
     traditionModal.showModal();
   });
   traditionGrid.append(button);
@@ -48,6 +57,14 @@ siteNav.querySelectorAll('a').forEach(link => link.addEventListener('click', () 
   menuToggle.setAttribute('aria-expanded', 'false');
   menuToggle.setAttribute('aria-label', 'Open navigation');
   siteNav.classList.remove('is-open');
+}));
+
+document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', event => {
+  const target = document.querySelector(link.getAttribute('href'));
+  if (!target) return;
+  event.preventDefault();
+  history.pushState(null, '', link.getAttribute('href'));
+  target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 }));
 
 async function sendToAppsScript(payload) {
