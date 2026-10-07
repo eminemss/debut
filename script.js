@@ -1,4 +1,4 @@
-const APPS_SCRIPT_ENDPOINT = '';
+const APPS_SCRIPT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxkcmBTQPP_u5_KGWfRHHxwIQFNelOUgI2NdS3navlKpcfWFpYP_GZfIa1IbCIJx_GAYQ/exec';
 
 const traditions = [
   { name: '18 Candles', icon: '🕯', attendees: ['Sample guest 1', 'Sample guest 2', 'Sample guest 3'], meaning: 'Eighteen candles represent the light, love, and guidance Merian carries into this next chapter. Each candle is a wish from someone who holds her dear.' },

@@ -15,7 +15,7 @@ Open `index.html` in a browser, or use VS Code's Live Server extension if you ha
 
 ## Enable attendance confirmations and photo uploads
 
-The RSVP and photo forms use Google Apps Script to email attendance confirmations to `gianallanflores14@gmail.com` and save uploaded photos to a Drive folder. These features are inactive until the script is deployed and its URL is configured.
+The RSVP and photo forms use Google Apps Script to email attendance confirmations to `meriankriztelnaive25@gmail.com` and save uploaded photos to a Drive folder. These features are inactive until the script is deployed and its URL is configured.
 
 1. Create a project at [script.google.com](https://script.google.com/) and paste in the contents of `google-apps-script.gs`.
 2. Select `setup` in the Apps Script editor and run it once. Review and grant the requested Google Drive and email permissions. This creates the event photo folder in the Google account that owns the script.

@@ -1,7 +1,7 @@
-const RSVP_RECIPIENT = 'gianallanflores14@gmail.com';
+const RSVP_RECIPIENT = 'meriankriztelnaive@gmail.com';
 const DRIVE_FOLDER_NAME = "Merian's 18th Birthday Memories";
 const DRIVE_FOLDER_PROPERTY = 'MEMORIES_DRIVE_FOLDER_ID';
-const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+const MAX_IMAGE_BYTES = 50 * 1024 * 1024;
 
 function setup() {
   const properties = PropertiesService.getScriptProperties();
