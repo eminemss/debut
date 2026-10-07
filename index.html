@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171112">
+  <meta name="description" content="Join Merian for an elegant 18th birthday celebration.">
+  <title>Merian's 18th Birthday</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header" id="top">
+    <a class="brand" href="#top" aria-label="Merian's birthday home">M<span>♥</span></a>
+    <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+      <a href="#message">A little message</a><a href="#traditions">Traditions</a><a href="#guestbook">Confirm attendance</a><a href="#details">The celebration</a>
+      <a class="nav-cta" href="#guestbook">Confirm your place <span>↗</span></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-glow"></div>
+      <div class="hero-copy">
+        <p class="eyebrow light">A night to remember · October 25, 2026</p>
+        <h1 id="hero-title"><span>Merian's</span><strong>18th Birthday</strong></h1>
+        <div class="tiny-divider"><i></i><span>♥</span><i></i></div>
+        <p class="hero-intro">Eighteen years of dreams, love, and amazing people. Join me as I celebrate this special chapter of my life!</p>
+        <div class="hero-meta">
+          <div><span class="meta-icon">⌖</span><p><b>The Haven Events Place</b><small>October 25 · 5:00 PM onwards</small></p></div>
+          <div><span class="meta-icon">✧</span><p><b>Dress code</b><small>Black semi-formal</small></p></div>
+        </div>
+        <a class="button button-rose" href="#message">Come celebrate <span>↓</span></a>
+      </div>
+      <div class="hero-portrait" role="img" aria-label="Placeholder for Merian's birthday portrait">
+        <div class="portrait-frame"><div class="portrait-placeholder"><span class="placeholder-spark">✳</span><span class="placeholder-monogram">M</span><span class="placeholder-caption">YOUR PHOTO GOES HERE</span></div></div>
+        <span class="portrait-note">eighteen & blooming <b>♡</b></span>
+        <span class="floating-heart heart-one">♡</span><span class="floating-heart heart-two">✦</span>
+      </div>
+      <span class="hero-side-note">A new chapter begins</span>
+    </section>
+
+    <section class="message-section section-pad" id="message">
+      <div class="section-kicker">A NOTE FROM THE BIRTHDAY GIRL</div>
+      <div class="message-layout">
+        <div class="message-copy">
+          <h2>A little <em>message</em></h2>
+          <p class="script-note">From me, Merian ♡</p>
+          <p>Eighteen years is a beautiful milestone, and I would love to celebrate this special chapter of my life with the people who mean the most to me. Thank you for being part of my journey. Your presence means everything!</p>
+          <p class="signature">With love, <em>Merian</em> ♡</p>
+        </div>
+        <div class="note-art" aria-hidden="true"><span class="note-stamp">18</span><span class="note-flower">✿</span><span class="note-script">same girl,<br>new chapter</span><span class="note-heart">♡</span></div>
+      </div>
+    </section>
+
+    <section class="style-section section-pad" id="style">
+      <div class="section-heading"><p class="section-kicker">THE LITTLE DETAILS</p><h2>Color & <em>style</em></h2><p>Two colors, one beautiful night. Find the shade that feels like you.</p></div>
+      <div class="palette-grid">
+        <article class="palette-card palette-pink"><span class="swatch"></span><div><h3>Pretty in pink</h3><p>Family & relatives</p></div><span class="palette-mark">01</span></article>
+        <article class="palette-card palette-black"><span class="swatch"></span><div><h3>Classic in black</h3><p>Friends</p></div><span class="palette-mark">02</span></article>
+      </div>
+      <div class="dress-code"><div class="dress-copy"><p class="section-kicker">YOUR EVENING LOOK</p><h3>Black semi-formal</h3><p>Dress to impress, but keep it classy. Think elegant dresses, jumpsuits, or chic sets. For the gentlemen, suits, blazers, or smart button-downs. Look polished, comfortable, and ready to celebrate.</p><button class="text-button" type="button" data-modal="outfit-modal">Open outfit guide <span>↗</span></button></div>
+        <div class="outfit-tiles" aria-label="Outfit inspiration placeholders"><div class="outfit-tile outfit-ladies"><span>HER EDIT</span><b>Soft silhouettes<br>& pretty details</b></div><div class="outfit-tile outfit-gents"><span>HIS EDIT</span><b>Sharp tailoring<br>& timeless black</b></div></div>
+      </div>
+    </section>
+
+    <section class="traditions-section section-pad" id="traditions">
+      <div class="section-heading"><p class="section-kicker">A FILIPINO BIRTHDAY TRADITION</p><h2>Our <em>traditions</em></h2><p>Tap a card to discover what makes each moment special.</p></div>
+      <div class="traditions-grid" id="traditions-grid"></div>
+    </section>
+
+    <section class="guest-section section-pad" id="guestbook">
+      <div class="guest-intro"><p class="section-kicker">YOUR MOMENT IN THE CELEBRATION</p><h2>Confirm your <em>attendance</em></h2><p>Please let us know you’ll be there, and confirm your tradition if you have one.</p></div>
+      <form class="rsvp-form" id="rsvp-form">
+        <label for="rsvp-name">Your full name</label>
+        <input id="rsvp-name" name="name" type="text" autocomplete="name" placeholder="Type your full name..." required maxlength="100">
+        <label for="rsvp-confirmation">Your attendance confirmation</label>
+        <textarea id="rsvp-confirmation" name="confirmation" required maxlength="500" placeholder="If you are part of a tradition, please tell us which one and confirm you’ll be there. For example: “I confirm that I will be present for the 18 Candles tradition.”"></textarea>
+        <button class="button button-dark" type="submit">Send my confirmation <span>♡</span></button>
+        <p class="form-feedback" id="rsvp-feedback" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="celebration-section section-pad" id="details">
+      <div class="celebration-info"><p class="section-kicker">THE CELEBRATION</p><h2>Save the <em>date</em></h2><div class="detail-row"><span>◷</span><p><b>Sunday, October 25, 2026</b><small>5:00 PM onwards</small></p></div><div class="detail-row"><span>⌖</span><p><b>The Haven Events Place</b><small>An evening together, somewhere lovely</small></p></div><div class="detail-row"><span>✧</span><p><b>Black semi-formal</b><small>Pink for family · Black for friends</small></p></div><button class="text-button light-button" type="button" id="copy-details">Copy event details <span>↗</span></button></div>
+      <div class="countdown-panel"><p class="section-kicker">COUNTING DOWN TO THE BIG NIGHT</p><div class="countdown" id="countdown" aria-label="Countdown to the birthday"><div><strong>--</strong><span>Days</span></div><div><strong>--</strong><span>Hours</span></div><div><strong>--</strong><span>Minutes</span></div><div><strong>--</strong><span>Seconds</span></div></div><button class="playlist-button" type="button" id="playlist-button" aria-pressed="false"><span class="music-equalizer" aria-hidden="true">♫</span><span id="playlist-label">Play a little birthday tune</span><span class="play-icon">▶</span></button><p class="audio-caption" id="audio-caption">A tiny melody, made just for this page.</p></div>
+    </section>
+
+    <section class="memories-section section-pad" id="memories">
+      <div class="memory-heading"><div><p class="section-kicker">HOLD ON TO THE LITTLE THINGS</p><h2>Memories of <em>the night</em></h2></div><p>Add your photos during the event. They’ll be saved to the celebration’s Google Drive.</p></div>
+      <div class="memory-actions">
+        <button class="button button-dark" type="button" id="upload-photos">Upload photos <span>↑</span></button>
+        <button class="button button-rose" type="button" id="take-photo">Take a photo <span>♡</span></button>
+        <input class="sr-only" id="photo-files" type="file" accept="image/*" multiple>
+        <input class="sr-only" id="camera-file" type="file" accept="image/*" capture="environment">
+      </div>
+      <p class="form-feedback" id="photo-feedback" aria-live="polite">Choose photos to send them to the event Google Drive.</p>
+      <div class="memory-grid" id="memory-grid" aria-live="polite"></div>
+    </section>
+  </main>
+  <footer class="site-footer"><a class="brand footer-brand" href="#top">M<span>♥</span></a><p>Thank you for being part of my 18th.</p><div class="footer-rule"><i></i>♥<i></i></div><small>Made with love for Merian · October 25, 2026</small><a class="back-top" href="#top" aria-label="Back to top">↑</a></footer>
+
+  <dialog class="info-modal" id="tradition-modal"><button class="modal-close" type="button" aria-label="Close">×</button><p class="section-kicker" id="tradition-kicker">A MOMENT TO REMEMBER</p><span class="modal-number" id="tradition-number">01</span><h2 id="tradition-title">18 Candles</h2><p id="tradition-description"></p><button class="button button-dark modal-done" type="button">Lovely, thank you</button></dialog>
+  <dialog class="info-modal outfit-modal" id="outfit-modal"><button class="modal-close" type="button" aria-label="Close">×</button><p class="section-kicker">A FEW THOUGHTS</p><h2>Dress for <em>the moment</em></h2><p>Keep it semi-formal, comfortable, and celebration-ready. Family and relatives are invited to wear pink; friends, please come in black. Feel free to add a little sparkle or a personal touch.</p><div class="modal-swatches"><span>Family & relatives <i class="pink-dot"></i></span><span>Friends <i class="black-dot"></i></span></div><button class="button button-dark modal-done" type="button">Got it</button></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
