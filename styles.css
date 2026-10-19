@@ -38,3 +38,7 @@
 .outfit-guide-image{width:100%;max-height:min(52vh,480px);margin:18px 0;overflow:hidden;border-radius:4px;background:#f8eeee}
 .outfit-guide-image img{display:block;width:100%;height:auto;max-height:min(52vh,480px);margin:auto;object-fit:contain}
 @media(max-width:480px){.tradition-roster ul{grid-template-columns:1fr}.rsvp-form .button{align-self:stretch;justify-content:center}}
+.outfit-guide-button,.copy-details-button{padding:11px 16px;border:0;border-radius:3px;color:#fff;font-weight:700}
+.outfit-guide-button{background:#171112}
+.copy-details-button{background:var(--rose)}
+.outfit-guide-button:hover,.copy-details-button:hover{transform:translateY(-2px)}
