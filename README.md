@@ -8,7 +8,7 @@ Open `index.html` in a browser, or use VS Code's Live Server extension if you ha
 
 ## Personalize before sharing
 
-- Replace the portrait placeholder in the hero with the birthday person's photo.
+- The hero portrait and message photo use `IMG_8535.jpg` and `IMG_8513.jpg`; replace those files to use different photos.
 - Update the date, venue, dress code, and birthday message in `index.html`.
 - Edit the five tradition descriptions in `script.js`.
 - If you change the event date, update the countdown date in `script.js` as well.

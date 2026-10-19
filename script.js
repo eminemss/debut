@@ -5,7 +5,7 @@ const traditions = [
   { name: '18 Shots', icon: '🥂', attendees: ['Sample guest 1', 'Sample guest 2', 'Sample guest 3'], meaning: 'A sparkling toast to eighteen years of laughter, friendship, and all the wonderful memories still to come. Raise a glass and celebrate together.' },
   { name: '18 Roses', icon: '❀', meaning: 'Eighteen roses are shared with the important people in Merian’s life—each one a little reminder of love, respect, and a special bond.' },
   { name: '18 Treasures', icon: '🎁', attendees: ['Sample guest 1', 'Sample guest 2', 'Sample guest 3'], meaning: 'Eighteen thoughtful keepsakes represent the treasured lessons, dreams, and tokens of affection that Merian will carry with her.' },
-  { name: 'Message of Love', icon: '♡', meaning: 'A few heartfelt words can become a memory for a lifetime. Share a wish, a favorite story, or a little encouragement for the birthday girl.' }
+  { name: '18 Blue Bills', icon: '💙', meaning: 'Eighteen blue bills represent wishes for prosperity and a bright new chapter. Each gift is a little token of support as Merian begins her next adventure.' }
 ];
 
 const traditionGrid = document.querySelector('#traditions-grid');
@@ -59,12 +59,44 @@ siteNav.querySelectorAll('a').forEach(link => link.addEventListener('click', () 
   siteNav.classList.remove('is-open');
 }));
 
+let scrollFrame;
+function cancelSmoothScroll() {
+  if (scrollFrame) {
+    window.cancelAnimationFrame(scrollFrame);
+    scrollFrame = undefined;
+  }
+}
+['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(eventName => {
+  window.addEventListener(eventName, cancelSmoothScroll, { passive: true });
+});
 document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', event => {
   const target = document.querySelector(link.getAttribute('href'));
   if (!target) return;
   event.preventDefault();
   history.pushState(null, '', link.getAttribute('href'));
-  target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  cancelSmoothScroll();
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    target.scrollIntoView({ behavior: 'auto', block: 'start' });
+    return;
+  }
+  const start = window.scrollY;
+  const scrollPadding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+  const end = target.getBoundingClientRect().top + start - scrollPadding;
+  const startTime = performance.now();
+  const duration = 1000;
+  function animateScroll(now) {
+    const progress = Math.min((now - startTime) / duration, 1);
+    const eased = progress < 0.5
+      ? 4 * progress ** 3
+      : 1 - ((-2 * progress + 2) ** 3) / 2;
+    window.scrollTo({ top: start + (end - start) * eased, behavior: 'instant' });
+    if (progress < 1) {
+      scrollFrame = window.requestAnimationFrame(animateScroll);
+    } else {
+      scrollFrame = undefined;
+    }
+  }
+  scrollFrame = window.requestAnimationFrame(animateScroll);
 }));
 
 async function sendToAppsScript(payload) {
@@ -170,7 +202,7 @@ async function uploadPhotos(fileList, input) {
 }
 
 document.querySelector('#copy-details').addEventListener('click', async () => {
-  const details = 'Merian’s 18th Birthday · Sunday, October 25, 2026 · 5:00 PM onwards · The Haven Events Place · Dress code: Black semi-formal';
+  const details = 'Merian’s 18th Birthday · Saturday, November 14, 2026 · 5:00 PM onwards · The Haven Events Place · Dress code: Black semi-formal';
   try {
     await navigator.clipboard.writeText(details);
     showToast('Event details copied to your clipboard.');
@@ -180,7 +212,7 @@ document.querySelector('#copy-details').addEventListener('click', async () => {
 });
 
 const countdown = document.querySelector('#countdown');
-const eventDate = new Date(2026, 9, 25, 17, 0, 0);
+const eventDate = new Date(2026, 10, 14, 17, 0, 0);
 function updateCountdown() {
   let remaining = Math.max(0, eventDate.getTime() - Date.now());
   const days = Math.floor(remaining / 86400000);
