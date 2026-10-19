@@ -25,7 +25,7 @@ traditions.forEach((item, index) => {
   button.className = 'tradition-card';
   button.type = 'button';
   button.setAttribute('aria-label', `Learn about ${item.name}`);
-  button.innerHTML = `<span class="tradition-icon" aria-hidden="true">${item.icon}</span><strong>${item.name}</strong><small>DISCOVER MORE　↗</small>`;
+  button.innerHTML = `<span class="tradition-icon" aria-hidden="true">${item.icon}</span><strong>${item.name}</strong><small>CLICK HERE　↗</small>`;
   button.addEventListener('click', () => {
     document.querySelector('#tradition-kicker').textContent = `TRADITION ${String(index + 1).padStart(2, '0')} OF ${traditions.length}`;
     document.querySelector('#tradition-number').textContent = String(index + 1).padStart(2, '0');
