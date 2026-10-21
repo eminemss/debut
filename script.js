@@ -325,7 +325,7 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && audioContext?.state === 'suspended') {
     audioContext.resume().then(() => {
       if (audioContext.state === 'running' && birthdayTune) {
-        audioCaption.textContent = 'A lively, original debut-party tune is playing on repeat.';
+        audioCaption.textContent = '';
       }
     }).catch(() => {
       audioCaption.textContent = 'Tap or press a key to resume the birthday tune.';
