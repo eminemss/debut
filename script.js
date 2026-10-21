@@ -183,7 +183,7 @@ document.querySelector('#copy-details').addEventListener('click', async () => {
 });
 
 const countdown = document.querySelector('#countdown');
-const eventDate = new Date(2026, 10, 14, 17, 0, 0);
+const eventDate = new Date(2026, 10, 14, 16, 0, 0);
 function updateCountdown() {
   let remaining = Math.max(0, eventDate.getTime() - Date.now());
   const days = Math.floor(remaining / 86400000);
