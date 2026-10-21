@@ -300,7 +300,7 @@ async function startBirthdayTune(showError = false) {
     playlistButton.setAttribute('aria-pressed', 'true');
     playlistButton.disabled = true;
     playlistLabel.textContent = 'Birthday tune is playing';
-    audioCaption.textContent = 'A lively, original debut-party tune is playing on repeat.';
+    audioCaption.textContent = '';
     document.removeEventListener('pointerdown', startTuneAfterInteraction);
     document.removeEventListener('keydown', startTuneAfterInteraction);
   } catch (error) {
